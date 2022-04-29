@@ -9,7 +9,7 @@ export default class DynRouter
     private routesArray: Route[]
     private config: IDynRouterConfig
 
-    constructor(config: IDynRouterConfig = { exportType: RouteExportType.EXPRESS, routeType: RouteConfigType.CODE }, routes: Route[] = []) {
+    constructor(config: IDynRouterConfig = { exportType: RouteExportType.EXPRESS, routeType: RouteConfigType.CODE }, routes: Route[] = [], app: unknown = null) {
         this.routesArray = routes
 
         /* TODO: import Routes from File
@@ -24,8 +24,8 @@ export default class DynRouter
             this.importRoutes()
         */
 
-        if (routes.length)
-            this.buildRoutes()
+        if (routes.length && app)
+            this.buildRoutes(app)
     }
 
     get count() : number {
@@ -42,9 +42,9 @@ export default class DynRouter
         }
     }
 
-    buildRoutes() {
-        const adapter : IAdapter = AdapterFactory.fetch(this.config)
-        adapter.configureRoutes(this.routesArray)
+    buildRoutes(app: any) {
+        const adapter = AdapterFactory.fetch(this.config)
+        adapter.configureRoutes(this.routesArray, app)
     }
 }
 
